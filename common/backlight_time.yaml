@@ -5,12 +5,14 @@
 # Controls display brightness based on sun position and time of day.
 #
 # Optional substitutions (defaults provided below):
-#   touchscreen_daytime_brightness: "100%"
-#   touchscreen_nighttime_brightness: "50%"
-#   touchscreen_idle_timeout: "30s"
-#   touchscreen_night_hour: "0"      # Hour for night mode (0-23)
-#   touchscreen_night_minute: "0"    # Minute for night mode (0-59)
-#   touchscreen_idle_timeout_always_on: "false"  # Set true to dim/off in all modes, not just Night
+#   display_daytime_brightness: "100%"
+#   display_nighttime_brightness: "50%"
+#   display_night_hour: "0"      # Hour for night mode (0-23)
+#   display_night_minute: "0"    # Minute for night mode (0-59)
+#   display_backlight_timeout_always_enabled: "false"  # Set true to dim/off in all modes, not just Night
+#   display_backlight_timeout_initial: "10"  # Initial backlight timeout in minutes (-1 to disable)
+#
+# Backlight idle timeout is controlled at runtime via the 'display_backlight_timeout' number entity (minutes).
 #
 # Modes:
 #   Day     - After sunrise, full brightness
@@ -20,12 +22,12 @@
 
 # Default values for backlight control - can be overridden in main YAML file
 substitutions:
-  touchscreen_daytime_brightness: "100%"
-  touchscreen_nighttime_brightness: "50%"
-  touchscreen_idle_timeout: "30s"
-  touchscreen_night_hour: "0"
-  touchscreen_night_minute: "0"
-  touchscreen_idle_timeout_always_on: "false"
+  display_daytime_brightness: "100%"
+  display_nighttime_brightness: "50%"
+  display_night_hour: "0"
+  display_night_minute: "0"
+  display_backlight_timeout_always_enabled: "false"
+  display_backlight_timeout_initial: ".12"
 
 sun:
   latitude: !secret latitude
@@ -41,6 +43,21 @@ sun:
         - select.set:
             id: brightness_mode
             option: "Day"
+
+number:
+  - platform: template
+    id: display_backlight_timeout
+    name: Backlight timeout
+    icon: "mdi:timer-outline"
+    optimistic: true
+    unit_of_measurement: "min"
+    initial_value: ${display_backlight_timeout_initial}
+    restore_value: true
+    min_value: -1
+    max_value: 720
+    step: 1
+    mode: box
+
 
 time:
   - platform: homeassistant
@@ -64,8 +81,8 @@ time:
     on_time:
       # Trigger night mode at configured time
       - seconds: 0
-        minutes: ${touchscreen_night_minute}
-        hours: ${touchscreen_night_hour}
+        minutes: ${display_night_minute}
+        hours: ${display_night_hour}
         then:
           - select.set:
               id: brightness_mode
@@ -78,14 +95,14 @@ time:
 
 lvgl:
   on_idle:
-    timeout: ${touchscreen_idle_timeout}
+    timeout: !lambda return (uint32_t)(id(display_backlight_timeout).state * 60000);
     then:
       - logger.log:
           level: INFO
           format: "LVGL is idle"
       - if:
           condition:
-            lambda: 'return id(brightness_mode).current_option() == "Night" || ${touchscreen_idle_timeout_always_on};'
+            lambda: 'return id(brightness_mode).current_option() == "Night" || ${display_backlight_timeout_always_enabled};'
           then:
             - light.turn_off: display_backlight
             - lvgl.pause:
@@ -126,21 +143,21 @@ script:
           then:
             - light.turn_on:
                 id: display_backlight
-                brightness: ${touchscreen_daytime_brightness}
+                brightness: ${display_daytime_brightness}
       - if:
           condition:
             lambda: 'return id(brightness_mode).current_option() == "Evening";'
           then:
             - light.turn_on:
                 id: display_backlight
-                brightness: ${touchscreen_nighttime_brightness}
+                brightness: ${display_nighttime_brightness}
       - if:
           condition:
             lambda: 'return id(brightness_mode).current_option() == "Night";'
           then:
             - light.turn_on:
                 id: display_backlight
-                brightness: ${touchscreen_nighttime_brightness}
+                brightness: ${display_nighttime_brightness}
 
   # ─────────────────────────────────────────────────────────────────────────────
   # Set brightness mode on boot based on sun position and time
@@ -170,7 +187,7 @@ script:
                   lambda: |-
                     auto now = id(system_time).now();
                     int current = now.hour * 60 + now.minute;
-                    int night = ${touchscreen_night_hour} * 60 + ${touchscreen_night_minute};
+                    int night = ${display_night_hour} * 60 + ${display_night_minute};
                     // Special case: if night_hour is midnight (0), use AM/PM as divider
                     // Evening = PM hours (12-23), Night = AM hours (0-11)
                     if (night == 0) {

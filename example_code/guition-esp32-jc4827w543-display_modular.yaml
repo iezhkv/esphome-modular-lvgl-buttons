@@ -14,19 +14,12 @@ substitutions:
   button_text_color: "white"
 
   # LCD back light modes - Code in backlight_time.yaml
-  # Set Day mode - starts at Sunrise - screen at 100%
-  touchscreen_daytime_brightness: "100%"
-  # Set Evening mode -  starts at Sunset - screen at 50% (may need to be brighter for some screens)
-  touchscreen_nighttime_brightness: "50%"
-  # Set Night mode start time (default is midnight)
-  touchscreen_night_hour: "0"      # Hour for night mode (0-23)
-  touchscreen_night_minute: "0"    # Minute for night mode (0-59)
-  # Set touchscreen idle timeout - In night mode back light goes off after this amount of time
-  touchscreen_idle_timeout: "60s"
-
-  # Screen Size
-  screen_height: '272px'
-  screen_width: '480px'
+   display_daytime_brightness: "100%"
+   display_nighttime_brightness: "50%"
+   display_night_hour: "0"      # Hour for night mode (0-23)
+   display_night_minute: "0"    # Minute for night mode (0-59)
+   display_backlight_timeout_always_enabled: "false"  # Set true to dim/off in all modes, not just Night
+   display_backlight_timeout_initial: "5"  # Initial backlight timeout in minutes (-1 to disable)
 
 esphome:
   name: "guition-esp32-jc4827w543c"
