@@ -3,21 +3,16 @@ set -euo pipefail
 
 REPO_URL="https://github.com/agillis/esphome-modular-lvgl-buttons.git"
 REPO_DIR="esphome-modular-lvgl-buttons"
-EXAMPLE_DIR="example_code"
+EXAMPLE_DIR="$REPO_DIR/example_code"
 PASS=0
 FAIL=0
 FAILED_FILES=()
 
-# Clone the repo (fresh copy)
-if [ -d "$REPO_DIR" ]; then
-  echo "Removing existing $REPO_DIR..."
-  rm -rf "$REPO_DIR"
+# Check repo directory exists
+if [ ! -d "$REPO_DIR" ]; then
+  echo "ERROR: $REPO_DIR directory not found!"
+  exit 1
 fi
-echo "Cloning $REPO_URL..."
-git clone "$REPO_URL"
-
-cd "$REPO_DIR"
-
 
 # Check example_code directory exists
 if [ ! -d "$EXAMPLE_DIR" ]; then
@@ -37,17 +32,17 @@ for yaml_file in "$EXAMPLE_DIR"/*.yaml; do
 
   echo "--- Testing: $basename ---"
 
-  # Copy to top level
+  # Copy to the directory containing the repo
   cp "$yaml_file" "$basename"
 
-  # Run esphome config and capture output
+  # Run esphome config from here (above the repo)
   if output=$(esphome config "$basename" 2>&1); then
     echo "  PASS"
-    ((PASS++))
+    ((PASS++)) || true
   else
     echo "  FAIL"
     echo "$output" | sed 's/^/    /'
-    ((FAIL++))
+    ((FAIL++)) || true
     FAILED_FILES+=("$basename")
   fi
 
