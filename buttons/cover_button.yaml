@@ -7,7 +7,7 @@
 # The button color changes to the actual state when stationary (open / closed).
 # Works with state based covers: open/opening/closing/closed
 # The slider only works with position based covers: % open
-# TODO: Make binary covers operate by manipulating the slider - suggest hiding the slider until fixed.
+# Binary covers (no position) will automatically have the slider hidden.
 # vars:
 #    uid:
 #    page_id:
@@ -18,7 +18,7 @@
 #    text:
 #    icon:
 #    entity_id:
-#    hide_slider: # Set to "true" to hide. Default "false".
+#    hide_slider: # Set to "true" to always hide. Default "false".
 
 lvgl:
   pages:
@@ -47,7 +47,7 @@ lvgl:
                         text: ${text}
                     - slider:
                         id: slider_${uid}
-                        hidden: ${hide_slider | default("false")}
+                        hidden: ${hide_slider | default("true")}
                         align: top_right
                         x: -5
                         y: 10
@@ -149,6 +149,13 @@ sensor:
     internal: true
     filters:
       - filter_out: nan
+    on_value:
+      # First valid position value means this cover supports position - show slider
+      - if:
+          condition:
+            lambda: 'return !isnan(x) && lv_obj_has_flag(id(slider_${uid}), LV_OBJ_FLAG_HIDDEN);'
+          then:
+            - lvgl.widget.show: slider_${uid}
 
   - platform: template
     id: position_${uid}

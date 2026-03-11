@@ -15,14 +15,13 @@ substitutions:
 
   # LCD back light modes - Code in backlight_time.yaml
   # Set Day mode - starts at Sunrise - screen at 100%
-  touchscreen_daytime_brightness: "100%"
+  display_daytime_brightness: "100%"
   # Set Evening mode -  starts at Sunset - screen at 50% (may need to be brighter for some screens)
-  touchscreen_nighttime_brightness: "50%"
+  display_nighttime_brightness: "50%"
   # Set Night mode start time (default is midnight)
-  touchscreen_night_hour: "0"      # Hour for night mode (0-23)
-  touchscreen_night_minute: "0"    # Minute for night mode (0-59)
+  display_night_hour: "0"      # Hour for night mode (0-23)
+  display_night_minute: "0"    # Minute for night mode (0-59)
   # Set touchscreen idle timeout - In night mode back light goes off after this amount of time
-  touchscreen_idle_timeout: "60s"
 
 esphome:
   name: "generic-display"
@@ -68,7 +67,7 @@ packages:
   hardware: !include esphome-modular-lvgl-buttons/hardware/generic.yaml
 
   # Basic boot screen with ESPHome logo and device diagnostic info
-  loading_screen: !include esphome-modular-lvgl-buttons/pages/loading_480px.yaml
+  loading_screen: !include esphome-modular-lvgl-buttons/pages/loading.yaml
   # info screen - WiFi login, IP address, MAC address etc
   info_screen: !include esphome-modular-lvgl-buttons/pages/info.yaml
 

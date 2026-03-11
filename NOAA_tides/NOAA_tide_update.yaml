@@ -181,7 +181,7 @@ text_sensor:
 # -------------------------------------------
 # Scripts
 # -------------------------------------------
-# Extend on_ha_connected script (called from loading_480px.yaml when HA connects)
+# Extend on_ha_connected script (called from loading.yaml when HA connects)
 script:
   - id: !extend on_ha_connected
     then:

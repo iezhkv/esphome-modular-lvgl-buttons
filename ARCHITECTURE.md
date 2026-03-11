@@ -200,7 +200,7 @@ binary_sensor:
 | **Page** | `buttons/page_button.yaml` | None | Navigates to another LVGL page |
 | **Time** | `buttons/time_button.yaml` | None | Displays current time, transparent button |
 | **Local Relay** | `buttons/local_relay_button.yaml` | `light` platform (binary output) | Controls GPIO directly, no HA needed |
-| **Cover** | `buttons/cover_button.yaml` | `text_sensor` + `cover.toggle/stop` | Position slider, 4 visual states (open/opening/closing/closed) |
+| **Cover** | `buttons/cover_button.yaml` | `text_sensor` + `cover.toggle/stop` | Position slider (auto-hidden for binary covers, shown when position data arrives), 4 visual states (open/opening/closing/closed) |
 | **Sensor** | `buttons/sensor_button.yaml` | `sensor` (extends existing) | 2-column grid: icon + label + live data value |
 | **Color Picker** | `buttons/color_picker.yaml` | HA script call | Color swatch, sends hex color to HA |
 
@@ -326,7 +326,7 @@ The main YAML includes this as a single package: `hardware: !include esphome-mod
 
 | Page | File | Purpose |
 |------|------|---------|
-| **Loading** | `pages/loading_480px.yaml` | Boot screen with HA/ESPHome logos, spinner, connection status, auto-dismisses |
+| **Loading** | `pages/loading.yaml` | Boot screen with HA/ESPHome logos, spinner, connection status, auto-dismisses |
 | **Info** | `pages/info.yaml` | System info: ESPHome version, build date, MAC, IP, SSID, WiFi strength, QR codes |
 | **Light Color** | `pages/light_color.yaml` | Advanced light control: HSV arc, brightness/saturation sliders, color temp, auto-detects capabilities |
 
@@ -352,11 +352,19 @@ lvgl:
 
 Two options (include one, not both):
 - `common/time_homeassistant.yaml` — Syncs time from Home Assistant
-- `common/time_sntp.yaml` — Uses NTP (for non-HA setups), also includes sun-based brightness mode switching
+- `common/time_sntp.yaml` — Uses NTP (for non-HA setups), also includes `sun:` and brightness mode scheduling
 
 Both define `system_time` and invoke the `time_update` script every minute. The user's main YAML must define the `time_update` script.
 
-**Note:** `common/backlight_time.yaml` also defines its own `time:` platform and `time_update` script. Use it as a replacement for the above when you want the 3-mode brightness system (Day/Evening/Night).
+**Note:** `common/backlight_time.yaml` is the recommended option — it bundles `time: homeassistant`, `sun:`, and the 3-mode brightness system (Day/Evening/Night) in one package. Use `time_sntp.yaml` only for standalone devices without Home Assistant. **Never combine `time_sntp.yaml` with `backlight_time.yaml`** — they both define `sun:` and `brightness_mode` scheduling and will conflict.
+
+### Variable Naming Convention
+
+All display/brightness substitution variables use the `display_*` prefix:
+- `display_daytime_brightness`, `display_nighttime_brightness`
+- `display_night_hour`, `display_night_minute`
+- `display_day_hour`, `display_day_minute` (SNTP only)
+- `display_backlight_timeout_initial`, `display_backlight_timeout_always_enabled`
 
 ## Backlight System (`common/backlight_time.yaml`)
 
@@ -397,10 +405,9 @@ This runs `esphome config` on every file in `example_code/` to verify YAML compi
 
 ## Known Issues & TODOs
 
-1. **Cover button binary covers**: The slider doesn't work correctly with binary (non-position) covers. TODO: hide slider for binary covers.
-2. **`shadow_width: 0`** in `theme_style.yaml` is explicitly set despite LVGL default being 0 — removing it causes visual issues.
-3. **Loading page is 480px only**: `pages/loading_480px.yaml` — no variants exist for other display sizes.
-4. **`time_button.yaml` uses hardcoded ID `time_label`**: Only one time button per device is supported.
+1. **`shadow_width: 0`** in `theme_style.yaml` is explicitly set despite LVGL default being 0 — removing it causes visual issues.
+2. **Loading page is 480px only**: `pages/loading.yaml` — no variants exist for other display sizes.
+3. **`time_button.yaml` uses hardcoded ID `time_label`**: Only one time button per device is supported.
 
 ## Creating a New Button Component
 

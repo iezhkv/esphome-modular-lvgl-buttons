@@ -5,7 +5,7 @@ substitutions:
   ha_sensor_production: 'sensor.envoy_${envoy_id}_lifetime_energy_production'
   ha_sensor_net_production: 'sensor.envoy_${envoy_id}_lifetime_net_energy_production'
 
-# Extend on_ha_connected script (called from loading_480px.yaml when HA connects)
+# Extend on_ha_connected script (called from loading.yaml when HA connects)
 script:
   - id: !extend on_ha_connected
     then:

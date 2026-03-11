@@ -95,7 +95,7 @@ A modular library for building beautiful, touch-enabled control panels using ESP
 |-----------|-------------|
 | `info.yaml` | System information screen (ESPHome version, IP, MAC, WiFi) |
 | `light_color.yaml` | Advanced light control with color wheel, brightness, saturation, and color temperature modes |
-| `loading_480px.yaml` | Boot screen with Home Assistant connection status |
+| `loading.yaml` | Boot screen with Home Assistant connection status |
 
 ### Widgets (`widgets/`)
 

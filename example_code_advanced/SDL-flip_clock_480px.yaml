@@ -77,7 +77,7 @@ packages:
   hardware: !include esphome-modular-lvgl-buttons/hardware/SDL-lvgl.yaml
 
   # Basic boot screen with ESPHome logo and device diagnostic info
-  loading_screen: !include esphome-modular-lvgl-buttons/pages/loading_480px.yaml
+  loading_screen: !include esphome-modular-lvgl-buttons/pages/loading.yaml
   # info screen - WiFi login, IP address, MAC address etc
   info_screen: !include esphome-modular-lvgl-buttons/pages/info.yaml
 

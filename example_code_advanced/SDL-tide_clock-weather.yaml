@@ -19,9 +19,8 @@ substitutions:
   button_height_single: '109px'
   button_height_double: '228px'
   button_width: '150px'
-  touchscreen_idle_timeout: "30s"
-  touchscreen_daytime_brightness: "100%"
-  touchscreen_nighttime_brightness: "50%"
+  display_daytime_brightness: "100%"
+  display_nighttime_brightness: "50%"
   # Boot screen configuration
   boot_screen_delay: 60s
 
@@ -29,8 +28,8 @@ substitutions:
   # Day mode is set to Sunrise
   # Evening mode is set to sunset
   # Set Night mode at midnight here
-  touchscreen_night_hour: '0'
-  touchscreen_night_minute: '0'
+  display_night_hour: '0'
+  display_night_minute: '0'
 
   # Screen Size
   screen_height: '480'
@@ -72,7 +71,7 @@ packages:
   hardware: !include esphome-modular-lvgl-buttons/hardware/SDL-lvgl.yaml
   
   # Basic boot screen with ESPHome logo and device diagnostic info
-  loading_screen: !include esphome-modular-lvgl-buttons/pages/loading_480px.yaml
+  loading_screen: !include esphome-modular-lvgl-buttons/pages/loading.yaml
   info_screen: !include esphome-modular-lvgl-buttons/pages/info.yaml
 
   # Tide forecast packages
