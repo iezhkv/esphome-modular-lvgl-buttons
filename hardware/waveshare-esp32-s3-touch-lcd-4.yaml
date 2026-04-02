@@ -1,5 +1,6 @@
-#-------------------------------------------
+---
 # Waveshare ESP32-S3 Touch LCD 4" hardware configuration file
+# https://www.waveshare.com/wiki/ESP32-S3-Touch-LCD-4
 
 esphome:
   min_version: 2026.3.0
@@ -15,41 +16,34 @@ esp32:
   flash_size: 16MB
   framework:
     type: esp-idf
-    sdkconfig_options:
-      CONFIG_ESP32S3_DEFAULT_CPU_FREQ_240: "y"
-      CONFIG_ESP32S3_DATA_CACHE_64KB: "y"
-      CONFIG_SPIRAM_FETCH_INSTRUCTIONS: y
-      CONFIG_SPIRAM_RODATA: y
+    advanced:
+      execute_from_psram: true
 
 preferences:
-  flash_write_interval: 1min
+  flash_write_interval: 5min
 
 psram:
   mode: octal
   speed: 80MHz
 
-
-
 i2c:
-  - id: tp_i2c
+  - id: bus_a
     sda: 15
     scl: 7
     scan: true
     frequency: 400kHz
-
 
 pca9554:
   id: expander
 
 touchscreen:
   platform: gt911
-  i2c_id: tp_i2c
+  i2c_id: bus_a
   id: my_touchscreen
   reset_pin:
     pca9554: expander
     number: 0
   interrupt_pin: 16
-
 
 light:
   - platform: monochromatic
@@ -83,7 +77,7 @@ spi:
     
 display:
   platform: st7701s
-  id: st7701s_disp
+  id: my_display
   update_interval: never
   auto_clear_enabled: false
   data_rate: 2MHz
@@ -107,7 +101,7 @@ display:
     red:
       - GPIO46       #r1
       - GPIO3        #r2
-      - GPIO8      #r3
+      - GPIO8        #r3
       - GPIO18       #r4
       - GPIO17       #r5
     green:
@@ -116,7 +110,7 @@ display:
       - GPIO12       #g2
       - GPIO11       #g3
       - GPIO10       #g4
-      - GPIO9     #g5
+      - GPIO9        #g5
     blue:
       - GPIO5        #b1
       - GPIO45       #b2
