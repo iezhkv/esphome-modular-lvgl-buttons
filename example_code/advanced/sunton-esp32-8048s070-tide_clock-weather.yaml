@@ -57,7 +57,7 @@ packages:
   # 1000s of glyphs
   glyphs: !include esphome-modular-lvgl-buttons/common/mdi_glyph_substitutions.yaml
   # Some basic sensors
-  sensors: !include esphome-modular-lvgl-buttons/sensors/sensors_base.yaml
+  sensors: !include esphome-modular-lvgl-buttons/common/sensors_base.yaml
   # Styles + Themes
   theme_style: !include esphome-modular-lvgl-buttons/common/theme_style.yaml
   # Include if your touch screen has a backlight. Also sets the time from HA
@@ -71,19 +71,19 @@ packages:
   info_screen: !include esphome-modular-lvgl-buttons/pages/info.yaml
 
   # Tide forecast packages
-  tides: !include esphome-modular-lvgl-buttons/tides/tide_update.yaml
+  tides: !include esphome-modular-lvgl-buttons/ui/tides/tide_update.yaml
 
   # Weather packages
   # Display weather forecast using direct HA action (no template sensor needed!)
   # Icons are included automatically in the action file
   weather_forecast_80: !include
-    file: esphome-modular-lvgl-buttons/weather_homeassistant/weather_forecast_action.yaml
+    file: esphome-modular-lvgl-buttons/ui/weather/forecast.yaml
     vars:
       size: 80
       weather_entity: weather.home
   # Get todays weather and display it (icons included automatically)
   weather_today_200: !include
-    file: esphome-modular-lvgl-buttons/weather_homeassistant/weather_today.yaml
+    file: esphome-modular-lvgl-buttons/ui/weather/today.yaml
     vars:
       size: 200
 

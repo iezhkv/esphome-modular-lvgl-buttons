@@ -65,7 +65,7 @@ packages:
   # 1000s of glyphs
   glyphs: !include esphome-modular-lvgl-buttons/common/mdi_glyph_substitutions.yaml
   # Some basic sensors
-  sensors: !include esphome-modular-lvgl-buttons/sensors/sensors_base-SDL.yaml
+  sensors: !include esphome-modular-lvgl-buttons/common/sensors_base_sdl.yaml
   # Get the time from HA
   time: !include esphome-modular-lvgl-buttons/common/time_homeassistant.yaml
   # Styles + Themes
@@ -96,7 +96,7 @@ packages:
 
   # Add a button that displays the time
   button_2: !include
-    file: esphome-modular-lvgl-buttons/widgets/flip_clock.yaml
+    file: esphome-modular-lvgl-buttons/ui/clock/flip_clock.yaml
     vars:
       uid: button_2
       row: 0
@@ -138,7 +138,7 @@ lvgl:
     - id: main_page
       layout: 3x3
       styles: page_style
-      <<: !include esphome-modular-lvgl-buttons/widgets/swipe_navigation.yaml
+      <<: !include esphome-modular-lvgl-buttons/common/swipe_navigation.yaml
       widgets:
         # You can use the package section above to add prebuilt button types or build your own custom button from scratch here.
         - container:

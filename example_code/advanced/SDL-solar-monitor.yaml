@@ -88,7 +88,7 @@ packages:
   # 1000s of glyphs
   glyphs: !include esphome-modular-lvgl-buttons/common/mdi_glyph_substitutions.yaml
   # Some basic sensors
-  sensors: !include esphome-modular-lvgl-buttons/sensors/sensors_base-SDL.yaml
+  sensors: !include esphome-modular-lvgl-buttons/common/sensors_base_sdl.yaml
   # Get the time from HA
   time: !include esphome-modular-lvgl-buttons/common/time_homeassistant.yaml
   # Styles + Themes
@@ -104,13 +104,13 @@ packages:
   info_screen: !include esphome-modular-lvgl-buttons/pages/info.yaml
 
   # Get solar panel info from Enphase
-  solar: !include esphome-modular-lvgl-buttons/solar/sensors_assets_solar.yaml
+  solar: !include esphome-modular-lvgl-buttons/ui/solar/sensors_assets_solar.yaml
   # Get backup Battery info from Enphase
-  battery: !include esphome-modular-lvgl-buttons/solar/sensors_assets_battery.yaml
+  battery: !include esphome-modular-lvgl-buttons/ui/solar/sensors_assets_battery.yaml
   # Fetch today's solar production/consumption from HA recorder
-  update_solar_today: !include esphome-modular-lvgl-buttons/solar/update_solar_today.yaml
+  update_solar_today: !include esphome-modular-lvgl-buttons/ui/solar/update_solar_today.yaml
   # Fetch realtime solar power data from HA
-  update_solar_realtime: !include esphome-modular-lvgl-buttons/solar/update_solar_realtime.yaml
+  update_solar_realtime: !include esphome-modular-lvgl-buttons/ui/solar/update_solar_realtime.yaml
   # Icons for todays weather
   # TODO: weather_icons.yaml does not exist in the repo yet
   # weather_icons_45: !include
@@ -119,12 +119,12 @@ packages:
   #     size: 45
 
   solar_icons_45: !include
-    file: esphome-modular-lvgl-buttons/solar/solar_icons.yaml
+    file: esphome-modular-lvgl-buttons/ui/solar/solar_icons.yaml
     vars:
       size: 45
 
   solar_icons_60: !include
-    file: esphome-modular-lvgl-buttons/solar/solar_icons.yaml
+    file: esphome-modular-lvgl-buttons/ui/solar/solar_icons.yaml
     vars:
       size: 60
 
@@ -168,7 +168,7 @@ lvgl:
         pad_row: 10
       bg_color: White
       <<: !include
-        file: esphome-modular-lvgl-buttons/widgets/swipe_navigation.yaml      
+        file: esphome-modular-lvgl-buttons/common/swipe_navigation.yaml      
       widgets:
 # Time/date display box
         - obj:
@@ -697,7 +697,7 @@ image:
         id: arrow_right_blue
         resize: 25x15
       # Weather placeholder icon
-      - file: esphome-modular-lvgl-buttons/weather_homeassistant/assets/images/unknown.svg
+      - file: esphome-modular-lvgl-buttons/ui/weather/assets/images/unknown.svg
         id: unknown_45
         resize: 45x45
 

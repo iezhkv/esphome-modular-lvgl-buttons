@@ -150,7 +150,7 @@ packages:
   colors:         !include esphome-modular-lvgl-buttons/common/color.yaml
   fonts:          !include esphome-modular-lvgl-buttons/common/fonts.yaml
   glyphs:         !include esphome-modular-lvgl-buttons/common/mdi_glyph_substitutions.yaml
-  sensors:        !include esphome-modular-lvgl-buttons/sensors/sensors_base.yaml
+  sensors:        !include esphome-modular-lvgl-buttons/common/sensors_base.yaml
   theme_style:    !include esphome-modular-lvgl-buttons/common/theme_style.yaml
   backlight:      !include esphome-modular-lvgl-buttons/common/backlight_time.yaml
   hardware:       !include esphome-modular-lvgl-buttons/hardware/<your-hardware>.yaml
@@ -173,7 +173,7 @@ lvgl:
   - id: main_page
     layout: 2x3
     styles: page_style
-    <<: !include esphome-modular-lvgl-buttons/widgets/swipe_navigation.yaml
+    <<: !include esphome-modular-lvgl-buttons/common/swipe_navigation.yaml
 
 font:
 - file: 'https://github.com/Templarian/MaterialDesign-Webfont/raw/v7.4.47/fonts/materialdesignicons-webfont.ttf'
@@ -229,7 +229,7 @@ Use the SDL hardware config:
 
 ```yaml
 hardware: !include esphome-modular-lvgl-buttons/hardware/SDL-lvgl.yaml
-sensors:  !include esphome-modular-lvgl-buttons/sensors/sensors_base-SDL.yaml
+sensors:  !include esphome-modular-lvgl-buttons/common/sensors_base_sdl.yaml
 ```
 
 Then `esphome run your-config.yaml` — a window opens simulating the display.
@@ -291,9 +291,9 @@ Then `esphome run your-config.yaml` — a window opens simulating the display.
 
 The following modules are present from the upstream fork and fully functional. They are not maintained by this fork — refer to the [upstream README](https://github.com/agillis/esphome-modular-lvgl-buttons) for documentation:
 
-- `weather_homeassistant/` — 4-day weather forecast via `weather.get_forecasts`
+- `ui/weather/` — 4-day weather forecast via `weather.get_forecasts`
 - `tides/` — NOAA tide data with gauge display
-- `solar/` — Enphase Envoy solar monitoring
+- `ui/solar/` — Enphase Envoy solar monitoring
 
 ---
 

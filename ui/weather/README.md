@@ -27,7 +27,7 @@ Displays a 4-day weather forecast using direct Home Assistant action calls. No t
 ```yaml
 packages:
   weather_forecast: !include
-    file: esphome-modular-lvgl-buttons/weather_homeassistant/weather_forecast_action.yaml
+    file: esphome-modular-lvgl-buttons/ui/weather/forecast.yaml
     vars:
       size: 80
       weather_entity: weather.home
@@ -56,7 +56,7 @@ Displays current weather conditions with temperature and optional summary text.
 ```yaml
 packages:
   weather_today: !include
-    file: esphome-modular-lvgl-buttons/weather_homeassistant/weather_today.yaml
+    file: esphome-modular-lvgl-buttons/ui/weather/today.yaml
     vars:
       size: 100
       weather_entity: weather.home
@@ -82,7 +82,7 @@ These widget IDs are created and can be referenced in your layouts:
 ## Directory Structure
 
 ```
-weather_homeassistant/
+ui/weather/
 ├── README.md                      # This file
 ├── weather_forecast_action.yaml   # 4-day forecast component
 ├── weather_today.yaml             # Current weather component
@@ -94,4 +94,4 @@ weather_homeassistant/
 
 ## Complete Example
 
-See the main project's [SDL-weather-forecast.yaml](../example_code_advanced/SDL-weather-forecast.yaml) for a complete working example that combines both weather components with a time display.
+See the main project's [SDL-weather-forecast.yaml](../example_code/advanced/SDL-weather-forecast.yaml) for a complete working example that combines both weather components with a time display.

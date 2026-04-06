@@ -2,7 +2,7 @@
 
 ## What This Fork Is
 
-A fork of [agillis/esphome-modular-lvgl-buttons](https://github.com/agillis/esphome-modular-lvgl-buttons). The upstream flat `buttons/` components are being **fully replaced** with a new, systematic architecture under `ui/`. The upstream infrastructure (`common/`, `hardware/`, `sensors/`, `widgets/`) is reused unchanged.
+A fork of [agillis/esphome-modular-lvgl-buttons](https://github.com/agillis/esphome-modular-lvgl-buttons). The upstream flat `buttons/` components are being **fully replaced** with a new, systematic architecture under `ui/`. The upstream infrastructure (`common/`, `hardware/`) is reused unchanged.
 
 ---
 
@@ -58,23 +58,41 @@ ui/
   sensor/
     local.yaml           ✅ implemented
     remote.yaml          ✅ implemented
-    detail.yaml          🔜 planned (maybe)
-  climate/
-    local.yaml           🔜 planned
-    remote.yaml          🔜 planned
-    detail.yaml          🔜 planned
+  binary_sensor/
+    local.yaml           ✅ implemented
+    remote.yaml          ✅ implemented
+  text_sensor/
+    local.yaml           ✅ implemented
+    remote.yaml          ✅ implemented
   button/
-    local.yaml           🔜 planned
-    remote.yaml          🔜 planned
+    local.yaml           ✅ implemented
+    remote.yaml          ✅ implemented
+  climate/
+    local.yaml           ✅ implemented
+    remote.yaml          ✅ implemented
+    detail.yaml          ✅ implemented
+  clock/
+    flip_clock.yaml      ✅ implemented
+  weather/
+    today.yaml           ✅ implemented
+    forecast.yaml        ✅ implemented
+  solar/                 ✅ implemented
+  tides/                 ✅ implemented
 
-pages/                   upstream global pages — reuse as-is, do not modify
-  loading.yaml
+pages/                   global UI pages — reuse as-is, do not modify
+  loading.yaml           boot screen (top_layer overlay, not a page)
   info.yaml
 
-common/                  upstream — reuse as-is, do not modify
-hardware/                upstream — reuse as-is, do not modify
-sensors/                 upstream — reuse as-is, do not modify
-widgets/                 upstream — reuse as-is, do not modify
+common/                  shared infrastructure — reuse as-is, do not modify
+  sensors_base.yaml      WiFi signal, CPU temp, restart buttons
+  sensors_base_sdl.yaml  SDL desktop testing variant
+  swipe_navigation.yaml  swipe gesture handler for pages
+  wifi.yaml, ota.yaml, color.yaml, fonts.yaml, theme_style.yaml, ...
+
+hardware/                device-specific configs — reuse as-is, do not modify
+
+example_code/            example device configs
+  advanced/              advanced integration examples (solar, tides, weather, clock)
 ```
 
 ---

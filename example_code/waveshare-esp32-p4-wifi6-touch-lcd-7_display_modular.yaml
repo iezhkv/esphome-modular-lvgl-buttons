@@ -67,7 +67,7 @@ packages:
   # 1000s of glyphs
   glyphs: !include esphome-modular-lvgl-buttons/common/mdi_glyph_substitutions.yaml
   # Some basic sensors
-  sensors: !include esphome-modular-lvgl-buttons/sensors/sensors_base.yaml
+  sensors: !include esphome-modular-lvgl-buttons/common/sensors_base.yaml
   # Styles + Themes
   theme_style: !include esphome-modular-lvgl-buttons/common/theme_style.yaml
   # Use this theme for debugging
@@ -141,7 +141,7 @@ lvgl:
     - id: main_page
       layout: 10x6
       styles: page_style
-      <<: !include esphome-modular-lvgl-buttons/widgets/swipe_navigation.yaml
+      <<: !include esphome-modular-lvgl-buttons/common/swipe_navigation.yaml
       widgets:
         # You can use the package section above to add prebuilt button types or build your own custom button from scratch here.
         - container:

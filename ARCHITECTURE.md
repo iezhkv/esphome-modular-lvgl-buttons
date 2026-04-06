@@ -14,25 +14,39 @@ This is **not** a Python or JavaScript project. Everything is ESPHome YAML with 
 
 ```
 esphome-modular-lvgl-buttons/
-├── ui/                       # All entity-type UI components (new system)
+├── ui/                       # All UI components
 │   ├── light/                #   local.yaml, remote.yaml, detail.yaml
-│   ├── switch/               #   local.yaml, remote.yaml  (planned)
-│   ├── climate/              #   local.yaml, remote.yaml, detail.yaml (planned)
-│   ├── sensor/               #   local.yaml, remote.yaml  (planned)
-│   └── button/               #   local.yaml, remote.yaml  (planned)
+│   ├── switch/               #   local.yaml, remote.yaml
+│   ├── sensor/               #   local.yaml, remote.yaml
+│   ├── binary_sensor/        #   local.yaml, remote.yaml
+│   ├── text_sensor/          #   local.yaml, remote.yaml
+│   ├── button/               #   local.yaml, remote.yaml
+│   ├── climate/              #   local.yaml, remote.yaml, detail.yaml
+│   ├── clock/                #   flip_clock.yaml
+│   ├── weather/              #   today.yaml, forecast.yaml, assets/
+│   ├── solar/                #   solar monitoring integration
+│   └── tides/                #   NOAA tide clock (tide_update.yaml, NOAA_tide_update.yaml)
 ├── pages/                    # Global UI pages (upstream, untouched)
 │   ├── loading.yaml          #   Boot screen with HA connection status
 │   └── info.yaml             #   System info: IP, MAC, WiFi, ESPHome version
-├── common/                   # Shared infrastructure (WiFi, OTA, fonts, colors, theme, time)
-├── hardware/                 # Device-specific configs (display driver, touch, backlight)
-├── sensors/                  # Base sensor packages (WiFi signal, CPU temp, device info)
-├── widgets/                  # Composable UI widgets (swipe navigation)
+├── common/                   # Shared infrastructure
+│   ├── wifi.yaml             #   WiFi configuration
+│   ├── ota.yaml              #   OTA update overlay
+│   ├── color.yaml            #   Named color palette
+│   ├── fonts.yaml            #   Nunito font declarations
+│   ├── mdi_glyph_substitutions.yaml  # MDI icon aliases
+│   ├── theme_style.yaml      #   LVGL theme and page_style
+│   ├── backlight_time.yaml   #   Day/night brightness control
+│   ├── sensors_base.yaml     #   WiFi signal, CPU temp, restart buttons
+│   ├── sensors_base_sdl.yaml #   Minimal SDL variant
+│   ├── swipe_navigation.yaml #   Swipe gesture handler
+│   ├── time_homeassistant.yaml
+│   └── time_sntp.yaml
+├── hardware/                 # Device-specific configs (display, touch, backlight)
 ├── example_code/             # Ready-to-use example configs per supported device
-├── weather_homeassistant/    # Upstream weather integration (untouched)
-├── tides/                    # Upstream NOAA tide display (untouched)
-├── solar/                    # Upstream solar monitoring (untouched)
+│   └── advanced/             #   Advanced integrations (solar, tides, weather, flip clock)
 ├── assets/                   # Fonts and images
-│   ├── fonts/                #   Nunito font files
+│   ├── fonts/                #   Nunito, Roboto, Gluqlo font files
 │   └── images/               #   SVG/PNG assets
 └── testing/                  # Config validation script
 ```
@@ -209,23 +223,24 @@ Each file is a self-contained device config providing display driver, touch cont
 
 Supported families: Guition, Sunton, Waveshare, Elecrow, LilyGo, Espressif dev kits, and SDL desktop simulation.
 
-### Sensors (`sensors/`)
+### Common (`common/`) — additional files
 
-- `sensors_base.yaml` — WiFi signal, CPU temp, device info, restart/factory-reset buttons, LVGL label updates
-- `sensors_base-SDL.yaml` — Minimal version for SDL desktop testing
+| File | Purpose |
+|---|---|
+| `sensors_base.yaml` | WiFi signal, CPU temp, restart/factory-reset buttons |
+| `sensors_base_sdl.yaml` | Minimal variant for SDL desktop testing |
+| `swipe_navigation.yaml` | Adds swipe gestures to any page via `<<: !include` |
 
-### Widgets (`widgets/`)
+### UI Feature Modules (`ui/`)
 
-- `swipe_navigation.yaml` — Adds swipe gestures to any page via YAML anchor merge (`<<: !include`)
+Beyond the core entity types, `ui/` also contains:
 
-### Upstream Feature Modules
-
-The following modules exist in the repository and are fully functional but are upstream features not maintained by this fork. Refer to the upstream README for documentation:
-
-- `weather_homeassistant/` — 4-day weather forecast via `weather.get_forecasts`
-- `tides/` — NOAA tide data with gauge and high/low tide times
-- `solar/` — Enphase Envoy production/consumption monitoring
-- `custom_components/noaa_tides/` — Custom ESPHome component backing the tides module
+| Folder | Purpose |
+|---|---|
+| `ui/clock/flip_clock.yaml` | Gluqlo-style flip clock widget |
+| `ui/weather/` | HA weather tile (`today.yaml`) and 4-day forecast (`forecast.yaml`) |
+| `ui/solar/` | Enphase/solar production and consumption monitoring |
+| `ui/tides/` | NOAA tide clock (`tide_update.yaml`) and NOAA API integration (`NOAA_tide_update.yaml`) |
 
 ---
 
@@ -253,6 +268,8 @@ bash esphome-modular-lvgl-buttons/testing/test_configs.sh
 
 Runs `esphome config` on every file in `example_code/` to verify YAML compilation. Run this before committing any change.
 
+Advanced examples live in `example_code/advanced/` and are not covered by the basic test script.
+
 ---
 
 ## SDL Desktop Development
@@ -262,7 +279,8 @@ Use the SDL hardware config to develop and test UI on a desktop (Linux/macOS) wi
 ```yaml
 packages:
   hardware: !include esphome-modular-lvgl-buttons/hardware/SDL-lvgl.yaml
-  sensors:  !include esphome-modular-lvgl-buttons/sensors/sensors_base-SDL.yaml
+  sensors:  !include esphome-modular-lvgl-buttons/common/sensors_base_sdl.yaml
+  swipe:    !include esphome-modular-lvgl-buttons/common/swipe_navigation.yaml
 ```
 
 Then run `esphome run <your-config>.yaml`. A window opens simulating the touchscreen. This is the recommended first step before deploying to real hardware.

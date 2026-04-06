@@ -78,7 +78,7 @@ packages:
   # 1000s of glyphs
   glyphs: !include esphome-modular-lvgl-buttons/common/mdi_glyph_substitutions.yaml
   # Some basic sensors
-  sensors: !include esphome-modular-lvgl-buttons/sensors/sensors_base-SDL.yaml
+  sensors: !include esphome-modular-lvgl-buttons/common/sensors_base_sdl.yaml
   # Styles + Themes
   # theme_style: !include esphome-modular-lvgl-buttons/common/theme_style.yaml
   theme_style: !include esphome-modular-lvgl-buttons/common/theme_style_debug.yaml
@@ -94,7 +94,7 @@ packages:
 
   # Tide forecast package
   tide_info: !include
-    file: esphome-modular-lvgl-buttons/NOAA_tides/NOAA_tide_update.yaml
+    file: esphome-modular-lvgl-buttons/ui/tides/NOAA_tide_update.yaml
     vars:
       noaa_station_id: "8454578"    # Your station ID
       noaa_unit_system: "english"   # or "metric"  
@@ -103,13 +103,13 @@ packages:
   # Display weather forecast using direct HA action (no template sensor needed!)
   # Icons are included automatically in the action file
   weather_forecast_80: !include
-    file: esphome-modular-lvgl-buttons/weather_homeassistant/weather_forecast_action.yaml
+    file: esphome-modular-lvgl-buttons/ui/weather/forecast.yaml
     vars:
       size: 80
       weather_entity: weather.home
   # Get todays weather and display it (icons included automatically)
   weather_today_180: !include
-    file: esphome-modular-lvgl-buttons/weather_homeassistant/weather_today.yaml
+    file: esphome-modular-lvgl-buttons/ui/weather/today.yaml
     vars:
       size: 180
       weather_entity: weather.home
@@ -174,7 +174,7 @@ lvgl:
       bg_color: ${bg_color}
       # layout: <rows>x<cols>
       layout: 5x9
-      # <<: !include esphome-modular-lvgl-buttons/widgets/swipe_navigation.yaml
+      # <<: !include esphome-modular-lvgl-buttons/common/swipe_navigation.yaml
       widgets:
          - container:
             grid_cell_x_align: stretch

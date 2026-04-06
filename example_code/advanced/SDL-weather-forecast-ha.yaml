@@ -31,13 +31,13 @@ packages:
   # Display weather forecast using direct HA action (no template sensor needed!)
   # Icons are included automatically in the action file
   weather_forecast_100: !include
-    file: esphome-modular-lvgl-buttons/weather_homeassistant/weather_forecast_action.yaml
+    file: esphome-modular-lvgl-buttons/ui/weather/forecast.yaml
     vars:
       size: 100
       weather_entity: weather.home
   # Get todays weather and display it (icons included automatically)
   weather_today_200: !include
-    file: esphome-modular-lvgl-buttons/weather_homeassistant/weather_today.yaml
+    file: esphome-modular-lvgl-buttons/ui/weather/today.yaml
     vars:
       size: 200
       weather_entity: weather.home
