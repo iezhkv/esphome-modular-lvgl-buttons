@@ -61,12 +61,9 @@ The entire library is built on ESPHome's `packages:` and `!include` mechanism. A
 
 ```yaml
 packages:
-  hardware: !include esphome-modular-lvgl-buttons/hardware/guition-esp32-s3-4848s040.yaml
-  colors:   !include esphome-modular-lvgl-buttons/common/color.yaml
-  fonts:    !include esphome-modular-lvgl-buttons/common/fonts.yaml
-  glyphs:   !include esphome-modular-lvgl-buttons/common/mdi_glyph_substitutions.yaml
-  theme:    !include esphome-modular-lvgl-buttons/common/theme_style.yaml
   wifi:     !include esphome-modular-lvgl-buttons/common/wifi.yaml
+  theme:    !include esphome-modular-lvgl-buttons/common/theme/index.yaml
+  hardware: !include esphome-modular-lvgl-buttons/hardware/guition-esp32-s3-4848s040.yaml
 
   kitchen_light: !include
     file: esphome-modular-lvgl-buttons/ui/light/remote.yaml
@@ -184,16 +181,28 @@ These modules are reused as-is and not modified by this fork.
 
 | File | Purpose |
 |---|---|
+| `wifi.yaml` | WiFi configuration template |
+| `ota.yaml` | Full-screen OTA overlay with progress bar |
+| `backlight_time.yaml` | 3-mode brightness (Day/Evening/Night) based on sun position |
+| `sensors_base.yaml` | WiFi signal, CPU temp, restart/factory-reset buttons |
+| `sensors_base_sdl.yaml` | Minimal variant for SDL desktop testing |
+| `swipe_navigation.yaml` | Adds swipe gestures to any page via `<<: !include` |
+| `time_homeassistant.yaml` | Time sync from Home Assistant |
+| `time_sntp.yaml` | Time sync via NTP (standalone, no HA) |
+
+### Theme bundle (`common/theme/`)
+
+Include `common/theme/index.yaml` once — it pulls in all four files below:
+
+| File | Purpose |
+|---|---|
 | `color.yaml` | ~50 named colors + full CSS color table reference |
 | `fonts.yaml` | Nunito font at 9 sizes (`nunito_12` → `nunito_72`) |
 | `mdi_glyph_substitutions.yaml` | 6000+ MDI icon substitutions (`$mdi_lightbulb`, etc.) |
-| `theme_style.yaml` | LVGL-wide defaults, `page_style`, dark/light theme switcher |
-| `theme_style_debug.yaml` | Same as above with red outlines for layout debugging |
-| `backlight_time.yaml` | 3-mode brightness (Day/Evening/Night) based on sun position |
-| `wifi.yaml` | WiFi configuration template |
-| `ota.yaml` | Full-screen OTA overlay with progress bar |
-| `time_homeassistant.yaml` | Time sync from Home Assistant |
-| `time_sntp.yaml` | Time sync via NTP (standalone, no HA) — do not combine with `backlight_time.yaml` |
+| `theme_style.yaml` | LVGL-wide defaults, `page_style`, button/label styles |
+| `theme_style_debug.yaml` | Same but with red outlines on all widgets |
+| `index.yaml` | Bundle: includes the four files above |
+| `index_debug.yaml` | Bundle: uses `theme_style_debug.yaml` instead |
 
 ### Theme and Color Rules
 

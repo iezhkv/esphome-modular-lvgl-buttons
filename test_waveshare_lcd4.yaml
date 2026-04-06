@@ -4,32 +4,12 @@
 # Flash with: esphome run test_waveshare_lcd4.yaml
 
 substitutions:
-  icon_font: mdi_icons_40
-  text_font: nunito_20
-  text_color: white
-  bg_color: black
-  button_on_color: "ep_orange"
-  button_off_color: "very_dark_gray"
-  icon_on_color: "yellow"
-  icon_off_color: "gray"
-  label_on_color: "white"
-  label_off_color: "gray"
-  button_text_color: "white"
-
-  display_daytime_brightness: "100%"
-  display_nighttime_brightness: "50%"
-  display_night_hour: "0"
-  display_night_minute: "0"
-  display_backlight_timeout_always_enabled: "false"
-  display_backlight_timeout_initial: "5"
-
+  screen_width:  "480"
   screen_height: "480"
-  screen_width: "480"
 
 esphome:
   name: "waveshare-lcd-4-test"
   friendly_name: "Waveshare LCD-4 Test"
-  comment: "ui/ component test — 480x480"
   on_boot:
   - priority: 400
     then:
@@ -40,21 +20,17 @@ logger:
 script:
 - id: time_update
   then:
-  - lambda: |-
-      // No operation
+  - lambda: return;
 
 packages:
-  wifi: !include esphome-modular-lvgl-buttons/common/wifi.yaml
-  ota_screen: !include esphome-modular-lvgl-buttons/common/ota.yaml
-  colors: !include esphome-modular-lvgl-buttons/common/color.yaml
-  fonts: !include esphome-modular-lvgl-buttons/common/fonts.yaml
-  glyphs: !include esphome-modular-lvgl-buttons/common/mdi_glyph_substitutions.yaml
-  sensors: !include esphome-modular-lvgl-buttons/common/sensors_base.yaml
-  theme_style: !include esphome-modular-lvgl-buttons/common/theme_style.yaml
-  backlight: !include esphome-modular-lvgl-buttons/common/backlight_time.yaml
-  hardware: !include esphome-modular-lvgl-buttons/hardware/waveshare-esp32-s3-touch-lcd-4-v4.yaml
+  wifi:           !include esphome-modular-lvgl-buttons/common/wifi.yaml
+  ota_screen:     !include esphome-modular-lvgl-buttons/common/ota.yaml
+  theme:          !include esphome-modular-lvgl-buttons/common/theme/index.yaml
+  sensors:        !include esphome-modular-lvgl-buttons/common/sensors_base.yaml
+  backlight:      !include esphome-modular-lvgl-buttons/common/backlight_time.yaml
+  hardware:       !include esphome-modular-lvgl-buttons/hardware/waveshare-esp32-s3-touch-lcd-4-v4.yaml
   loading_screen: !include esphome-modular-lvgl-buttons/pages/loading.yaml
-  info_screen: !include esphome-modular-lvgl-buttons/pages/info.yaml
+  info_screen:    !include esphome-modular-lvgl-buttons/pages/info.yaml
 
   # ── Row 0 — Lights ───────────────────────────────────────────────────────────
 
@@ -148,10 +124,38 @@ packages:
       text: "Thermostat"
       icon: $mdi_thermostat
 
+  # ── Page 2 — Restaurant Lights ───────────────────────────────────────────────
+
+  restaurant_dancing_btn: !include
+    file: esphome-modular-lvgl-buttons/ui/light/remote.yaml
+    vars:
+      uid: restaurant_dancing
+      entity_id: "light.restaurant_lights_dancing"
+      page_id: restaurant_page
+      row: 0
+      column: 0
+      text: "Dancing"
+      icon: $mdi_ceiling_light
+
+  restaurant_bar_doors_btn: !include
+    file: esphome-modular-lvgl-buttons/ui/light/remote.yaml
+    vars:
+      uid: restaurant_bar_doors
+      entity_id: "light.restaurant_lights_bar_doors"
+      page_id: restaurant_page
+      row: 0
+      column: 1
+      text: "Bar Doors"
+      icon: $mdi_ceiling_light
+
 lvgl:
   buffer_size: 100%
   pages:
   - id: main_page
+    layout: 3x3
+    styles: page_style
+    <<: !include esphome-modular-lvgl-buttons/common/swipe_navigation.yaml
+  - id: restaurant_page
     layout: 3x3
     styles: page_style
     <<: !include esphome-modular-lvgl-buttons/common/swipe_navigation.yaml
@@ -237,13 +241,13 @@ font:
   size: 40
   bpp: 8
   glyphs:
-  # light detail page (required)
+  # light detail page
   - $mdi_brightness_6
   - $mdi_chevron_up
   - $mdi_circle_opacity
   - $mdi_eyedropper
   - $mdi_lightbulb
-  # climate detail page (required)
+  # climate detail page
   - $mdi_arrow_oscillating
   - $mdi_chevron_left
   - $mdi_thermostat

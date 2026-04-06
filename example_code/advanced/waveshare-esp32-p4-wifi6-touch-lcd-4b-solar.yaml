@@ -81,11 +81,8 @@ script:
 packages:
   wifi:           !include esphome-modular-lvgl-buttons/common/wifi.yaml
   ota_screen:     !include esphome-modular-lvgl-buttons/common/ota.yaml
-  colors:         !include esphome-modular-lvgl-buttons/common/color.yaml
-  fonts:          !include esphome-modular-lvgl-buttons/common/fonts.yaml
-  glyphs:         !include esphome-modular-lvgl-buttons/common/mdi_glyph_substitutions.yaml
+  theme:  !include esphome-modular-lvgl-buttons/common/theme/index.yaml
   sensors:        !include esphome-modular-lvgl-buttons/common/sensors_base.yaml
-  theme_style:    !include esphome-modular-lvgl-buttons/common/theme_style.yaml
   backlight:      !include esphome-modular-lvgl-buttons/common/backlight_time.yaml
   hardware:       !include esphome-modular-lvgl-buttons/hardware/waveshare-esp32-p4-wifi6-touch-lcd-4b.yaml
   media_voice:    !include esphome-modular-lvgl-buttons/hardware/media_player-voice_assistant.yaml

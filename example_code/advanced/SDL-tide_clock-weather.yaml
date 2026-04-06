@@ -72,16 +72,7 @@ packages:
   # Enable OTA updates with a status screen
   # ota_screen: !include esphome-modular-lvgl-buttons/common/ota.yaml
   # All the colors
-  colors: !include esphome-modular-lvgl-buttons/common/color.yaml
-  # Some nice basic fonts
-  fonts: !include esphome-modular-lvgl-buttons/common/fonts.yaml
-  # 1000s of glyphs
-  glyphs: !include esphome-modular-lvgl-buttons/common/mdi_glyph_substitutions.yaml
-  # Some basic sensors
-  sensors: !include esphome-modular-lvgl-buttons/common/sensors_base_sdl.yaml
-  # Styles + Themes
-  # theme_style: !include esphome-modular-lvgl-buttons/common/theme_style.yaml
-  theme_style: !include esphome-modular-lvgl-buttons/common/theme_style_debug.yaml
+  theme:  !include esphome-modular-lvgl-buttons/common/theme/index_debug.yaml
   # Include if your touch screen has a backlight. Also sets the time from HA
   backlight: !include esphome-modular-lvgl-buttons/common/backlight_time.yaml
 
