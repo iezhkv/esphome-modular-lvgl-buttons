@@ -15,6 +15,8 @@ image:
         resize: 320x95
 
 lvgl:
+  on_ready:
+    - light.turn_on: display_backlight
   top_layer:
     widgets:
       - button:
@@ -99,6 +101,12 @@ lvgl:
                 y: -30
                 align: bottom_mid
                 src: esphome_img
+esphome:
+  on_boot:
+  - priority: 400
+    then:
+    - script.execute: update_loading_page
+
 script:
   - id: update_loading_page
     then:

@@ -10,10 +10,6 @@ substitutions:
 esphome:
   name: "waveshare-lcd-4-test"
   friendly_name: "Waveshare LCD-4 Test"
-  on_boot:
-  - priority: 400
-    then:
-    - script.execute: update_loading_page
 
 logger:
 
