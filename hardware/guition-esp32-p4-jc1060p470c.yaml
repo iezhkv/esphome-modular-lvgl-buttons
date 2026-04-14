@@ -1,31 +1,33 @@
-# The Waveshare ESP32-P4-WIFI6-Touch-LCD-10.1 is a self contained, 10.1 inch 800x1280 touchscreen display with an ESP32-P4 MCU.
+# Guition-ESP32-P4-JC1060P470c 7" Capacitive touch
 #
-# Schematic: https://github.com/waveshareteam/ESP32-P4-WIFI6-Touch-LCD-X
-# Wiki: https://www.waveshare.com/wiki/ESP32-P4-WIFI6-Touch-LCD-10.1
+# Hardware configuration file
 ---
 
 substitutions:
-  # Screen Size (portrait orientation - 10.1" display)
-  # Swapped automatically for 90/270 rotation
-  screen_height: ${1280 if rotation | default("0") not in ["90", "270"] else 800}
-  screen_width: ${800 if rotation | default("0") not in ["90", "270"] else 1280}
+  # Screen Size
+  screen_height: 600
+  screen_width: 1024
 
 esphome:
-  min_version: 2026.4.0
+  min_version: 2026.3.0
   project:
-    name: "Waveshare.ESP32-P4-WIFI6-Touch-LCD-10-1"
+    name: "Guition.ESP32-P4-JC1060P470c"
     version: "1.0"
 
 esp32:
   board: esp32-p4-evboard
   variant: esp32p4
-  flash_size: 32MB
+  flash_size: 16MB
   cpu_frequency: 360MHz
   framework:
     type: esp-idf
     advanced:
       execute_from_psram: true
       enable_idf_experimental_features: true
+
+esp_ldo:
+  - channel: 3
+    voltage: 2.5V
 
 psram:
   mode: hex
@@ -34,15 +36,12 @@ psram:
 preferences:
   flash_write_interval: 5min
 
-esp_ldo:
-  - voltage: 2.5V
-    channel: 3
-    
-http_request:  # Needed by esp32_hosted-update and any JSON stuff    
+http_request:  # Needed by esp32_hosted-update and any JSON stuff
 
 # -------------------------------------------
 # Network hardware
 # -------------------------------------------
+
 esp32_hosted:
   variant: ESP32C6
   reset_pin: GPIO54
@@ -63,46 +62,27 @@ update:
     source: https://esphome.github.io/esp-hosted-firmware/manifest/esp32c6.json
     update_interval: 6h
 
-# -------------------------------------------
-# Touchscreen GT911/GT9271 i2c
-# -------------------------------------------
-i2c:
-  - id: bus_a
-    sda: GPIO07
-    scl: GPIO08
-    frequency: 400kHz
-    scan: true
-
-touchscreen:
-  - platform: gt911
-    id: my_touchscreen
-    i2c_id: bus_a
-    update_interval: 50ms
-    transform:
-      swap_xy: false
-      mirror_x: false
-      mirror_y: false
-      # on_touch:
-      #   - logger.log:
-      #   format: Touch at (%d, %d)
-      #   args: [touch.x, touch.y]
-      #   - lambda: |-
-      #       ESP_LOGI("cal", "x=%d, y=%d, x_raw=%d, y_raw=%0d",
-      #       touch.x,
-      #       touch.y,
-      #       touch.x_raw,
-      #       touch.y_raw
-      #       );
+# ethernet:
+#   type: IP101
+#   mdc_pin: GPIO31
+#   mdio_pin: GPIO52
+#   clk: 
+#     pin: GPIO50
+#     mode: CLK_EXT_IN
+#   phy_addr: 1
+#   power_pin: GPIO51
 
 # -------------------------------------------
-# Backlight
+# Internal outputs
 # -------------------------------------------
 output:
-  - platform: ledc
-    id: gpio_backlight_pwm
-    pin: GPIO26
-    inverted: false
-    frequency: 1000Hz
+  - id: gpio_backlight_pwm
+    platform: ledc
+    pin: GPIO23
+      #    frequency: 100Hz
+      #    inverted: false
+    #min_power: 0.1 # To prevent the backlight from being too dim
+    #    max_power: 0.8 # To prevent overheating due to excessive lighting
 
 light:
   - platform: monochromatic
@@ -111,22 +91,55 @@ light:
     icon: mdi:lightbulb-on
     id: display_backlight
     restore_mode: ALWAYS_ON
-    default_transition_length: 250ms
+    default_transition_length: 0s
+    gamma_correct: 1.0
+
+# -------------------------------------------
+# i2c bus
+# -------------------------------------------
+i2c:
+  - id: bus_a
+    sda: GPIO7
+    scl: GPIO8
+    frequency: 400kHz
+
+# -------------------------------------------
+# Touchscreen
+# -------------------------------------------
+touchscreen:
+  - platform: gt911
+    id: my_touchscreen
+    reset_pin: GPIO22
+    interrupt_pin: GPIO21
+    address: 0x5D
+    transform:
+      swap_xy: false
+      mirror_x: false
+      mirror_y: false
+#   on_touch:
+#     - logger.log:
+#           format: Touch at (%d, %d)
+#           args: [touch.x, touch.y]
+#     - lambda: |-
+#           ESP_LOGI("cal", "x=%d, y=%d, x_raw=%d, y_raw=%0d",
+#               touch.x,
+#               touch.y,
+#               touch.x_raw,
+#               touch.y_raw
+#               );
 
 # -------------------------------------------
 # Display
 # -------------------------------------------
 display:
   - platform: mipi_dsi
-    id: main_display
-    model: WAVESHARE-P4-NANO-10.1
-    reset_pin:
-      number: GPIO27
+    model: JC1060P470
+    id: my_display
     update_interval: never
-    auto_clear_enabled: false
-    dimensions:
-      width: 800
-      height: 1280
+    reset_pin:
+      number: GPIO05
+    hsync_pulse_width: 20
+
 
 # Special LVGL settings required for this display
 lvgl:
@@ -134,38 +147,38 @@ lvgl:
   byte_order: little_endian
 
 # -------------------------------------------
-# Audio devices
+# Audio - speaker/mic
 # -------------------------------------------
 i2s_audio:
   - id: audio_bus
-    i2s_mclk_pin: GPIO13
     i2s_lrclk_pin: GPIO10
     i2s_bclk_pin: GPIO12
+    i2s_mclk_pin: GPIO13
 
 audio_dac:
   - platform: es8311
     id: es8311_dac
+    bits_per_sample: 16bit
     i2c_id: bus_a
     address: 0x18
 
 audio_adc:
   - platform: es7210
     id: es7210_adc
+    bits_per_sample: 16bit
     i2c_id: bus_a
-    address: 0x40
+    address: 0x32
+    sample_rate: 16000
 
 microphone:
   - platform: i2s_audio
     id: my_microphone
     i2s_audio_id: audio_bus
-    i2s_din_pin: GPIO11
+    i2s_din_pin: GPIO48
     sample_rate: 16000
     bits_per_sample: 16bit
     adc_type: external
-    # on_data:
-    #   - logger.log:
-    #       format: "Microphone data received: %d bytes"
-    #       args: [x.size()]
+    channel: right
 
 speaker:
   - platform: i2s_audio
@@ -174,7 +187,7 @@ speaker:
     i2s_dout_pin: GPIO9
     audio_dac: es8311_dac
     dac_type: external
-    channel: mono
+    channel: left
     buffer_duration: 100ms
     bits_per_sample: 16bit
     sample_rate: 48000
@@ -202,9 +215,7 @@ speaker:
 
 switch:
   - platform: gpio
+    pin: GPIO11
+    name: "Audio Amplifier"
     id: audio_amplifier
-    name: Speaker Enable
-    icon: "mdi:speaker"
-    entity_category: config
-    pin: GPIO53  # BSP_POWER_AMP_IO
-    restore_mode: RESTORE_DEFAULT_ON
+    restore_mode: ALWAYS_ON

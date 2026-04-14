@@ -82,12 +82,16 @@ script:
       - lvgl.indicator.update:
           id: minute_hand
           value: !lambda |-
-            return id(system_time).now().minute;
+            int minute = id(system_time).now().minute;
+            ESP_LOGD("clock", "Minute hand value: %d", minute);
+            return minute;
       - lvgl.indicator.update:
           id: hour_hand
           value: !lambda |-
             auto now = id(system_time).now();
-            return std::fmod(now.hour, 12) * 60 + now.minute;
+            float hour_val = std::fmod(now.hour, 12) * 60 + now.minute;
+            ESP_LOGD("clock", "Hour hand value: %.1f (hour=%d, minute=%d)", hour_val, now.hour, now.minute);
+            return hour_val;
 
 packages:
   # Generic configuration for ESP32 screens
@@ -129,8 +133,8 @@ packages:
       shadow_color: black
       shadow_opa: 50%
       shadow_width: 20
-      shadow_ofs_x: 2
-      shadow_ofs_y: 2
+      shadow_offset_x: 2
+      shadow_offset_y: 2
       layout:
         type: grid
         grid_rows: [ FR(1), content]
@@ -168,7 +172,6 @@ lvgl:
                         width: 60
                         bg_opa: TRANSP
                         border_width: 6
-                        border_color: black
                         radius: 50%
                         indicator:
                           bg_color: black
@@ -183,33 +186,25 @@ lvgl:
                             range_to: 60
                             angle_range: 360
                             rotation: 270
-                            ticks:
-                              count: 13
-                              length: 2
-                              width: 0
                             indicators:
                               - line:
                                   id: minute_hand
+                                  rounded: true
                                   width: 6
-                                  color: black
-                                  r_mod: 6
+                                  length: 14
                                   value: 0
                           # Hour hand scale (0-720 for smooth positioning between hours)
                           - range_from: 0
                             range_to: 720
                             angle_range: 360
                             rotation: 270
-                            ticks:
-                              count: 13
-                              length: 2
-                              width: 0
                             indicators:
                               - line:
                                   id: hour_hand
+                                  rounded: true
                                   width: 6
-                                  color: black
-                                  r_mod: 0
-                                  value: 0
+                                  length: 6
+                                  value: 180
                     - obj:
                           grid_cell_row_pos: 0
                           grid_cell_column_pos: 1
@@ -739,18 +734,18 @@ image:
       - file: esphome-modular-lvgl-buttons/assets/images/solar/produced_icon.svg
         id: produced_icon_60
         resize: 60x60
+
       # Arrow images for the Enphase-style energy flow diagram
       - file: esphome-modular-lvgl-buttons/assets/images/solar/arrow_right_gray.svg
         id: arrow_right_gray
         resize: 25x15
-
       - file: esphome-modular-lvgl-buttons/assets/images/solar/arrow_right_green.svg
         id: arrow_right_green
         resize: 25x15
-
       - file: esphome-modular-lvgl-buttons/assets/images/solar/arrow_right_blue.svg
         id: arrow_right_blue
         resize: 25x15
+
       # Weather icons
       - file: esphome-modular-lvgl-buttons/ui/weather/assets/images/nt_clear.svg
         id: clear_night_45

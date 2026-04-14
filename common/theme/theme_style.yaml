@@ -47,7 +47,13 @@ lvgl:
       bg_color: $button_off_color
       # outline_width: 1
       # outline_color: red
-
+    meter:
+      border_color: black
+      indicator:
+        bg_color: black
+      # outline_width: 1
+      # outline_color: red        
+    
   style_definitions:
     - id: page_style
       scrollbar_mode: "OFF"
