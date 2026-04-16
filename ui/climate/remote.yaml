@@ -337,19 +337,29 @@ script:
       condition:
         lambda: return id(${uid}_dual_setpoint) && id(${uid}_mode) == 1;
       then:
+      - lambda: |-
+          float low = id(${uid}_target_temp);
+          if (low > id(${uid}_target_temp_high))
+            id(${uid}_target_temp_high) = low;
       - homeassistant.action:
           action: climate.set_temperature
           data:
             entity_id: ${entity_id}
             target_temp_low: !lambda return id(${uid}_target_temp);
+            target_temp_high: !lambda return id(${uid}_target_temp_high);
   - if:
       condition:
         lambda: return id(${uid}_dual_setpoint) && id(${uid}_mode) == 2;
       then:
+      - lambda: |-
+          float high = id(${uid}_target_temp);
+          if (high < id(${uid}_target_temp_low))
+            id(${uid}_target_temp_low) = high;
       - homeassistant.action:
           action: climate.set_temperature
           data:
             entity_id: ${entity_id}
+            target_temp_low: !lambda return id(${uid}_target_temp_low);
             target_temp_high: !lambda return id(${uid}_target_temp);
   - if:
       condition:

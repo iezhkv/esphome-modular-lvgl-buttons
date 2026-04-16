@@ -649,6 +649,7 @@ script:
       - lvgl.arc.update:
           id: ${uid}_arc
           value: !lambda return (int)(id(${uid}_target_temp) * 10);
+          arc_color: very_dark_gray
           indicator:
             arc_color: ep_orange
       - lvgl.widget.update:
@@ -686,8 +687,9 @@ script:
       - lvgl.arc.update:
           id: ${uid}_arc
           value: !lambda return (int)(id(${uid}_target_temp) * 10);
+          arc_color: ep_blue
           indicator:
-            arc_color: ep_blue
+            arc_color: very_dark_gray
       - lvgl.widget.update:
           id: ${uid}_arc
           clickable: true
@@ -722,6 +724,7 @@ script:
       then:
       - lvgl.arc.update:
           id: ${uid}_arc
+          arc_color: very_dark_gray
           indicator:
             arc_color: misty_blue
       - lvgl.widget.update:
@@ -757,6 +760,7 @@ script:
       then:
       - lvgl.arc.update:
           id: ${uid}_arc
+          arc_color: very_dark_gray
           indicator:
             arc_color: ep_green
       - lvgl.widget.update:
@@ -785,6 +789,7 @@ script:
       then:
       - lvgl.arc.update:
           id: ${uid}_arc
+          arc_color: very_dark_gray
           indicator:
             arc_color: yellow
       - lvgl.widget.update:
@@ -813,6 +818,7 @@ script:
       then:
       - lvgl.arc.update:
           id: ${uid}_arc
+          arc_color: very_dark_gray
           indicator:
             arc_color: very_dark_gray
       - lvgl.widget.update:
